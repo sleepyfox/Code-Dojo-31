@@ -5,12 +5,14 @@ describe 'A concordance', ->
     if string
       lines = string.split('\n')
       result = {}
-      for line, i in lines
-        words = line.split(' ').map (x) -> x.toLowerCase()
-        for word in words
-          unless result[word]
-            result[word] = []
-          result[word].push(i+1)
+      words = lines.map (x) -> x.split(/\s/)
+
+      for line, i in words
+        for word in line
+          lc_word = word.toLowerCase()
+          unless result[lc_word]
+            result[lc_word] = []
+          result[lc_word].push(i + 1)
       result
     else
       {}
