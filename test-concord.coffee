@@ -2,10 +2,9 @@ require('chai').should()
 
 describe 'A concordance', ->
   concord = (string) ->
+    result = {}
     if string
-      lines = string.split('\n')
-      result = {}
-      words = lines.map (x) -> x.split(/\s/)
+      words = string.split('\n').map (x) -> x.split(/\s/)
 
       for line, i in words
         for word in line
@@ -13,9 +12,7 @@ describe 'A concordance', ->
           unless result[lc_word]
             result[lc_word] = []
           result[lc_word].push(i + 1)
-      result
-    else
-      {}
+    result
 
   describe 'of an empty string', ->
     it 'should return an empty hash', ->
