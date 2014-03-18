@@ -15,6 +15,7 @@
     "mocha": "^1.18.2",
     "chai": "^1.9.0",
     "coffee-script": "^1.7.1",
-    "coffeelint": "^1.1.0"
+    "coffeelint": "^1.1.0",
+    "node-inspector": "^0.7.1"
   }
 }
