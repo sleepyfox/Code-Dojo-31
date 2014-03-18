@@ -9,9 +9,11 @@ describe 'A concordance', ->
     else
       {}
 
-  it 'should take an empty string and return an empty hash', ->
-    concord("").should.be.an 'object'
-    concord("").should.be.empty
+  describe 'of an empty string', ->
+    it 'should return an empty hash', ->
+      concord("").should.be.an 'object'
+      concord("").should.be.empty
+  
   describe "of a single word", ->
     result = concord("Fish")
     it "should return a hash", ->
@@ -20,4 +22,5 @@ describe 'A concordance', ->
       result.should.have.ownProperty 'fish'
     it 'should have fish appear on line 1', ->
       result.fish.should.contain 1
-      
+
+
