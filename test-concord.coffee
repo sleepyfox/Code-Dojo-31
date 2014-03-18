@@ -3,10 +3,15 @@ require('chai').should()
 describe 'A concordance', ->
   concord = (string) ->
     if string
-      words = string.split(' ')
+      lines = string.split('\n')
       result = {}
-      result[word.toLowerCase()] = [1] for word in words
-      return result
+      for line, i in lines
+        words = line.split(' ').map (x) -> x.toLowerCase()
+        for word in words
+          unless result[word]
+            result[word] = []
+          result[word].push(i+1)
+      result
     else
       {}
 
@@ -40,10 +45,16 @@ describe 'A concordance', ->
     it 'should have 3 keys', ->
       Object.keys(result).should.have.length 3
 
-  # describe 'of two lines', ->
-  #   text = """Now is the winter of our discontent
-  #             made gloriour summer by a son of York"""
-  #   console.log "|#{text}|"
-  #   result = concord(text)
-  #   it 'should have 15 keys', ->
-
+  describe 'of two lines', ->
+    text = """Now is the winter of our discontent
+              made gloriour summer by a son of York"""
+    result = concord(text)
+    it 'should have 14 keys', ->
+      #console.log JSON.stringify result
+      Object.keys(result).should.have.length 14
+    it 'should have of appear twice', ->
+      result['of'].should.have.length 2
+    it 'of should appear on line one', ->
+      result['of'].should.contain 1
+    it 'of should appear on line two', ->
+      result['of'].should.contain 2
