@@ -1,0 +1,20 @@
+{
+  "name": "Concordance",
+  "version": "0.0.1",
+  "description": "A code kata implementation that produces a concordance for a text",
+  "main": "index.js",
+  "scripts": {
+    "test": "coffeelint test-*.coffee && mocha --compilers coffee:coffee-script/register -u bdd -R spec test-*.coffee"
+  },
+  "keywords": [
+    "kata"
+  ],
+  "author": "@sleepyfox",
+  "license": "CC: see LICENSE file",
+  "devDependencies": {
+    "mocha": "^1.18.2",
+    "chai": "^1.9.0",
+    "coffee-script": "^1.7.1",
+    "coffeelint": "^1.1.0"
+  }
+}
