@@ -14,7 +14,17 @@ word_list = (array) -> # [line_num, string]
 multi_line_word_list = (a) -> # [[line_num, string]]
   (word_list x for x in a)
   # returns [[line_num, [words]]]
-  
+    
+occurance_list = (list_of_words) -> # [ line_num, [words]]
+  console.log "starting Occ"
+  fn = (previousValue, currentValue, index, array) ->
+    line_num = array[index - 1]
+    if typeof currentValue is 'object' # OMG! Arrays are objects?!
+      previousValue.push [word, line_num] for word in currentValue
+    previousValue
+  list_of_words.reduce fn, []
+  # returns [[word, line_num]]
+
 
 describe "Convertine text to numbered lines", ->
   describe 'when given a one liner', ->
@@ -75,3 +85,23 @@ describe 'Occurances', ->
       result[4][0].should.equal 'cat'
       result[4][1].should.equal 2
 
+describe 'A concordance', ->
+  describe 'when given a occurance list with a single word', ->
+    occurances = [['owl', 1]]
+    concordance = (x) -> # [[word, line_num]]
+      fn = (prev, curr) ->
+        [word, line_num] = curr
+        if prev.word?
+          prev[word].push line_num
+        else
+          prev[word] = [line_num]
+        return prev
+      x.reduce fn, {}
+      # returns { word: [line_num] }
+    result = concordance occurances
+    it 'should give a single entry', ->
+      Object.keys(result).should.have.length 1
+    it 'should have a key "owl"', ->
+      result.should.have.property 'owl'
+    it 'should have owl on line 1', ->
+      result.owl[0].should.equal 1
