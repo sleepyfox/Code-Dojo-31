@@ -25,6 +25,17 @@ occurance_list = (list_of_words) -> # [ line_num, [words]]
   list_of_words.reduce fn, []
   # returns [[word, line_num]]
 
+concordance = (x) -> # [[word, line_num]]
+  fn = (prev, curr) ->
+    [word, line_num] = curr
+    if prev[word]?
+      prev[word].push line_num
+    else
+      prev[word] = [line_num]
+    return prev
+  x.reduce fn, {}
+  # returns { word: [line_num] }
+
 
 describe "Convertine text to numbered lines", ->
   describe 'when given a one liner', ->
@@ -88,16 +99,6 @@ describe 'Occurances', ->
 describe 'A concordance', ->
   describe 'when given a occurance list with a single word', ->
     occurances = [['owl', 1]]
-    concordance = (x) -> # [[word, line_num]]
-      fn = (prev, curr) ->
-        [word, line_num] = curr
-        if prev.word?
-          prev[word].push line_num
-        else
-          prev[word] = [line_num]
-        return prev
-      x.reduce fn, {}
-      # returns { word: [line_num] }
     result = concordance occurances
     it 'should give a single entry', ->
       Object.keys(result).should.have.length 1
@@ -105,3 +106,19 @@ describe 'A concordance', ->
       result.should.have.property 'owl'
     it 'should have owl on line 1', ->
       result.owl[0].should.equal 1
+  describe 'when given an occurance list with two lines', ->
+    occurances = [['now', 1], ['is', 1], ['the', 1], ['winter', 1],
+                  ['the', 2], ['cat', 2], ['sat', 2]]
+    result = concordance occurances
+    it 'should have 6 entries', ->
+      Object.keys(result).should.have.length 6
+    it 'should have a single entry for winter on line one', ->
+      result['winter'].should.have.length 1
+      result['winter'][0].should.equal 1
+    it 'should have two entries for "the" on line 1 and 2', ->
+      result['the'].should.have.length 2
+      result['the'].should.contain 1
+      result['the'].should.contain 2
+
+
+
