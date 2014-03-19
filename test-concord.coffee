@@ -1,7 +1,6 @@
 require('chai').should()
 C = require './concord'
 
-
 describe "Convertine text to numbered lines", ->
   describe 'when given a one liner', ->
     result = C.text_to_numbered_lines 'one liner'
@@ -9,6 +8,7 @@ describe "Convertine text to numbered lines", ->
       result[0][1].should.equal 'one liner'
     it 'should be labelled as line 1', ->
       result[0][0].should.equal 1
+
   describe 'when given a two line text', ->
     result = C.text_to_numbered_lines 'line one\nline two'
     it 'should have line one labelled as 1', ->
@@ -17,6 +17,7 @@ describe "Convertine text to numbered lines", ->
     it 'should have line two labelled as 2', ->
       result[1][0].should.equal 2
       result[1][1].should.equal 'line two'
+
 
 describe 'Convertine lines to words', ->
   describe 'when given a one line text', ->
@@ -28,6 +29,7 @@ describe 'Convertine lines to words', ->
       words[0].should.equal 1
     it 'should have "liner" on line 1', ->
       words[1].should.contain 'liner'
+
   describe 'when given a two line text', ->
     two_line_text = "line one\nline two"
     words = C.multi_line_word_list C.text_to_numbered_lines two_line_text
@@ -40,6 +42,27 @@ describe 'Convertine lines to words', ->
       words[1][1].should.contain 'two'
       words[1][1].should.contain 'line'
 
+
+describe 'A multi-line word list', ->
+  describe 'when given a two line text', ->
+    text = [[1, "The cat sat"], [2, "on the mat"]]
+    result = C.multi_line_word_list text
+    it 'should return 2 elements', ->
+      result.should.have.length 2
+    it 'should have three words on line one', ->
+      result[0][1].should.have.length 3
+    it 'should have the, cat and sat on line one', ->
+      result[0][0].should.equal 1
+      result[0][1].should.contain 'the' # lower case
+      result[0][1].should.contain 'cat'
+      result[0][1].should.contain 'sat'
+    it 'should have on, the and mat on line two', ->
+      result[1][0].should.equal 2
+      result[1][1].should.contain 'on'
+      result[1][1].should.contain 'the'
+      result[1][1].should.contain 'mat'
+
+
 describe 'Occurances', ->
   describe 'when given a list of line numbers and word lists', ->
     words = [1, ['Now', 'is', 'the', 'winter', 'of', 'our', 'discontent']]
@@ -49,6 +72,7 @@ describe 'Occurances', ->
     it 'should have winter on line one', ->
       result[3][0].should.equal 'winter'
       result[3][1].should.equal 1
+
   describe 'when given a word list from a two line text', ->
     words = [1, ['Now', 'is', 'the', 'winter'], 2, ['cat', 'sat', 'on']]
     result = C.occurance_list words
@@ -61,6 +85,7 @@ describe 'Occurances', ->
       result[4][0].should.equal 'cat'
       result[4][1].should.equal 2
 
+
 describe 'A concordance', ->
   describe 'when given a occurance list with a single word', ->
     occurances = [['owl', 1]]
@@ -71,10 +96,12 @@ describe 'A concordance', ->
       result.should.have.property 'owl'
     it 'should have owl on line 1', ->
       result.owl[0].should.equal 1
+      
   describe 'when given an occurance list with two lines', ->
     occurances = [['now', 1], ['is', 1], ['the', 1], ['winter', 1],
                   ['the', 2], ['cat', 2], ['sat', 2]]
     result = C.concordance occurances
+    console.log JSON.stringify result
     it 'should have 6 entries', ->
       Object.keys(result).should.have.length 6
     it 'should have a single entry for winter on line one', ->
@@ -84,6 +111,3 @@ describe 'A concordance', ->
       result['the'].should.have.length 2
       result['the'].should.contain 1
       result['the'].should.contain 2
-
-
-
