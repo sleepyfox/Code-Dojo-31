@@ -1,3 +1,6 @@
+# A set of text manipulation functions for building
+# concordances
+
 line_to_words = (s) -> s.split(/\s/)
 
 text_to_numbered_lines = (s) ->
@@ -36,9 +39,11 @@ concordance = (x) -> # [[word, line_num]]
   x.reduce fn, {}
   # returns { word: [line_num] }
 
-module.exports.line_to_words = line_to_words
-module.exports.text_to_numbered_lines = text_to_numbered_lines
-module.exports.word_list = word_list
-module.exports.multi_line_word_list = multi_line_word_list
-module.exports.occurance_list = occurance_list
-module.exports.concordance = concordance
+# Exports
+module.exports = 
+  line_to_words: line_to_words
+  text_to_numbered_lines: text_to_numbered_lines
+  word_list: word_list
+  multi_line_word_list: multi_line_word_list
+  occurance_list: occurance_list
+  concordance: concordance
