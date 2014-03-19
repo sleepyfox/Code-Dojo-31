@@ -14,11 +14,7 @@ word_list = (array) -> # [line_num, string]
 multi_line_word_list = (a) -> # [[line_num, string]]
   (word_list x for x in a)
   # returns [[line_num, [words]]]
-    
-
-concord = (string) ->
-  lines = text_to_numbered_lines string
-  #words = line_to_words lines
+  
 
 describe "Convertine text to numbered lines", ->
   describe 'when given a one liner', ->
@@ -57,4 +53,25 @@ describe 'Convertine lines to words', ->
       words[1][0].should.equal 2
       words[1][1].should.contain 'two'
       words[1][1].should.contain 'line'
+
+describe 'Occurances', ->
+  describe 'when given a list of line numbers and word lists', ->
+    words = [1, ['Now', 'is', 'the', 'winter', 'of', 'our', 'discontent']]
+    result = occurance_list words
+    it 'should return 7 tuples', ->
+      result.should.have.length 7
+    it 'should have winter on line one', ->
+      result[3][0].should.equal 'winter'
+      result[3][1].should.equal 1
+  describe 'when given a word list from a two line text', ->
+    words = [1, ['Now', 'is', 'the', 'winter'], 2, ['cat', 'sat', 'on']]
+    result = occurance_list words
+    it 'should have 7 tuples', ->
+      result.should.have.length 7
+    it 'should have winter on line one', ->
+      result[3][0].should.equal 'winter'
+      result[3][1].should.equal 1
+    it 'should have cat on line two', ->
+      result[4][0].should.equal 'cat'
+      result[4][1].should.equal 2
 
