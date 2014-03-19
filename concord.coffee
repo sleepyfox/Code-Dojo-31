@@ -1,8 +1,6 @@
 # A set of text manipulation functions for building
 # concordances
 
-line_to_words = (s) -> s.split(/\s/)
-
 text_to_numbered_lines = (s) ->
   ( [i + 1, line] for line, i in s.split('\n') )
 
@@ -41,7 +39,6 @@ concordance = (x) -> # [[word, line_num]]
 
 # Exports
 module.exports = 
-  line_to_words: line_to_words
   text_to_numbered_lines: text_to_numbered_lines
   word_list: word_list
   multi_line_word_list: multi_line_word_list
