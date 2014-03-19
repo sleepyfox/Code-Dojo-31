@@ -7,7 +7,7 @@ text_to_numbered_lines = (s) ->
 word_list = (array) -> # [line_num, string]
   line_words = array.map (x) ->
     if typeof x is 'string'
-      x.toLowerCase().split(/\s+/)
+      x.toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/)
     else
       x
   # returns [line_num, [words]]
@@ -38,7 +38,7 @@ concordance = (x) -> # [[word, line_num]]
   fn = (prev, curr) ->
     [word, line_num] = curr
     if prev[word]?
-      prev[word].push line_num
+      prev[word].push line_num unless prev[word].indexOf(line_num) >= 0
     else
       prev[word] = [line_num]
     return prev

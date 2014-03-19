@@ -42,6 +42,15 @@ describe 'Convertine lines to words', ->
       words[1][1].should.contain 'two'
       words[1][1].should.contain 'line'
 
+  describe 'when given a line with punctuation in it', ->
+    text = [1, "Wow! said Fred, what will we do now?"]
+    words = C.word_list text
+    console.log words
+    it 'should remove punctuation', ->
+      words[1][0].should.equal 'wow' # Not Wow!
+      words[1][2].should.equal 'fred' # Not Fred,
+      words[1][7].should.equal 'now' # Not now?
+
 
 describe 'A multi-line word list', ->
   describe 'when given a two line text', ->
@@ -145,5 +154,7 @@ describe 'A concordance', ->
       Object.keys(result).should.have.length 33
     it 'should have two occurances of "his"', ->
       result['his'].should.have.length 2
-    it 'should have five occurances of "of"', ->
-      result['of'].should.have.length 5
+    it 'should have two occurances of "of"', ->
+      result['of'].should.have.length 2
+    it 'should not have more than one "of" on the first line', ->
+      result['of'].should.deep.equal [1, 2]
