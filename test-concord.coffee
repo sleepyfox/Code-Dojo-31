@@ -87,7 +87,6 @@ describe 'Occurances', ->
   describe 'when given a list of line numbers and word lists', ->
     words = [[1, ['Now', 'is', 'the', 'winter', 'of', 'our', 'discontent']]]
     result = C.occurance_list words
-    console.log result
     it 'should return 7 tuples', ->
       result.should.have.length 7
     it 'should have winter on line one', ->
@@ -97,7 +96,6 @@ describe 'Occurances', ->
   describe 'when given a word list from a two line text', ->
     words = [[1, ['Now', 'is', 'the', 'winter']], [2, ['cat', 'sat', 'on']]]
     result = C.occurance_list words
-    console.log result
     it 'should have 7 tuples', ->
       result.should.have.length 7
     it 'should have winter on line one', ->
@@ -123,7 +121,6 @@ describe 'A concordance', ->
     occurances = [['now', 1], ['is', 1], ['the', 1], ['winter', 1],
                   ['the', 2], ['cat', 2], ['sat', 2]]
     result = C.concordance occurances
-    console.log JSON.stringify result
     it 'should have 6 entries', ->
       Object.keys(result).should.have.length 6
     it 'should have a single entry for winter on line one', ->
@@ -134,7 +131,7 @@ describe 'A concordance', ->
       result['the'].should.contain 1
       result['the'].should.contain 2
 
-  xdescribe 'when given the 1st para of the Magna Carta', ->
+  describe 'when given the 1st para of the Magna Carta', ->
     text = """JOHN, by the grace of God King of England, Lord of
     Ireland, Duke of Normandy and Aquitaine, and Count of Anjou,
     to his archbishops, bishops, abbots, earls, barons, justices,
@@ -144,6 +141,9 @@ describe 'A concordance', ->
     mwl = C.multi_line_word_list num_lines
     occurances = C.occurance_list mwl
     result = C.concordance occurances
-    it 'should have many entries', ->
-      # console.log JSON.stringify mwl
-      Object.keys(result).should.have.length 10
+    it 'should have 33 words', ->
+      Object.keys(result).should.have.length 33
+    it 'should have two occurances of "his"', ->
+      result['his'].should.have.length 2
+    it 'should have five occurances of "of"', ->
+      result['of'].should.have.length 5

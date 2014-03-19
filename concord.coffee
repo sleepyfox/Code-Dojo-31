@@ -4,7 +4,7 @@
 text_to_numbered_lines = (s) ->
   ( [i + 1, line] for line, i in s.split('\n') )
 
-word_list = (array) -> # [line_num, string] 
+word_list = (array) -> # [line_num, string]
   line_words = array.map (x) ->
     if typeof x is 'string'
       x.toLowerCase().split(/\s+/)
