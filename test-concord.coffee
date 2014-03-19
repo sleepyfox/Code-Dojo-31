@@ -1,59 +1,60 @@
 require('chai').should()
 
-describe 'A concordance', ->
-  concord = (string) ->
-    result = {}
-    if string
-      words = string.split('\n').map (x) -> x.split(/\s/)
+line_to_words = (s) -> s.split(/\s/)
+text_to_numbered_lines = (s) ->
+  ( [i + 1, line] for line, i in s.split('\n') )
+word_list = (array) -> # [line_num, string]
+  line_words = array.map (x) ->
+    if typeof x is 'string'
+      x.split(/\s+/)
+    else
+      x
+  # returns [line_num, [words]]
 
-      for line, i in words
-        for word in line
-          lc_word = word.toLowerCase()
-          unless result[lc_word]
-            result[lc_word] = []
-          result[lc_word].push(i + 1)
-    result
+multi_line_word_list = (a) -> # [[line_num, string]]
+  (word_list x for x in a)
+  # returns [[line_num, [words]]]
+    
 
-  describe 'of an empty string', ->
-    it 'should return an empty hash', ->
-      concord("").should.be.an 'object'
-      concord("").should.be.empty
-  
-  describe 'of a single word', ->
-    result = concord "Fish"
-    it "should return a hash", ->
-      result.should.be.an 'object'
-    it 'should have a single key "fish"', ->
-      result.should.have.property 'fish'
-    it 'should have fish appear on line 1', ->
-      result.fish.should.contain 1
+concord = (string) ->
+  lines = text_to_numbered_lines string
+  #words = line_to_words lines
 
-  describe 'of a single line', ->
-    result = concord "Now is the winter of our discontent"
-    it 'should have seven keys', ->
-      Object.keys(result).should.have.length 7
-    it 'should have a key "now" appear on line one', ->
-      result.should.have.property 'now'
-      result['now'].should.contain 1
-    it 'should have a key "winter" appear on line one', ->
-      result.should.have.property 'winter'
-      result['winter'].should.contain 1
+describe "Convertine text to numbered lines", ->
+  describe 'when given a one liner', ->
+    result = text_to_numbered_lines 'one liner'
+    it 'should have the right text', ->
+      result[0][1].should.equal 'one liner'
+    it 'should be labelled as line 1', ->
+      result[0][0].should.equal 1
+  describe 'when given a two line text', ->
+    result = text_to_numbered_lines 'line one\nline two'
+    it 'should have line one labelled as 1', ->
+      result[0][0].should.equal 1
+      result[0][1].should.equal 'line one'
+    it 'should have line two labelled as 2', ->
+      result[1][0].should.equal 2
+      result[1][1].should.equal 'line two'
 
-  describe 'with duplication', ->
-    result = concord "red lorry yellow lorry"
-    it 'should have 3 keys', ->
-      Object.keys(result).should.have.length 3
+describe 'Convertine lines to words', ->
+  describe 'when given a one line text', ->
+    words = word_list text_to_numbered_lines("one liner")[0]
+    it 'should output an array with 2 elements', ->
+      words.should.have.length 2
+    it 'should have "one" on line 1', ->
+      words[1].should.contain 'one'
+      words[0].should.equal 1
+    it 'should have "liner" on line 1', ->
+      words[1].should.contain 'liner'
+  describe 'when given a two line text', ->
+    two_line_text = "line one\nline two"
+    words = multi_line_word_list text_to_numbered_lines two_line_text
+    it 'should have line one include line and one', ->
+      words[0][0].should.equal 1
+      words[0][1].should.contain 'one'
+      words[0][1].should.contain 'line'
+    it 'should have line two include line and two', ->
+      words[1][0].should.equal 2
+      words[1][1].should.contain 'two'
+      words[1][1].should.contain 'line'
 
-  describe 'of two lines', ->
-    text = """Now is the winter of our discontent
-              made gloriour summer by a son of York"""
-    result = concord(text)
-    it 'should have 14 keys', ->
-      #console.log JSON.stringify result
-      Object.keys(result).should.have.length 14
-    it 'should have of appear twice', ->
-      result['of'].should.have.length 2
-    it 'of should appear on line one', ->
-      result['of'].should.contain 1
-    it 'of should appear on line two', ->
-      result['of'].should.contain 2
