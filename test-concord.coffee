@@ -62,11 +62,32 @@ describe 'A multi-line word list', ->
       result[1][1].should.contain 'the'
       result[1][1].should.contain 'mat'
 
+describe 'A flatten', ->
+  describe 'when given an empty array', ->
+    it 'should return an empty array', ->
+      result = C.flatten []
+      result.should.be.instanceOf Array
+      result.should.be.empty
+  describe 'when given an array of one dimension', ->
+    it 'should return the same array', ->
+      result = C.flatten [1, 2, 3]
+      result.should.have.length 3
+      result.should.deep.equal [1, 2, 3]
+  describe 'when given a 2D array', ->
+    it 'should return a 1D flattened array', ->
+      result = C.flatten [[1,2],[3,4]]
+      result.should.deep.equal [1,2,3,4]
+  describe 'if given a 3D array', ->
+    it 'should return a 2D array', ->
+      result = C.flatten [[[1,2],[3,4]]]
+      result.should.deep.equal [[1,2], [3,4]]
+
 
 describe 'Occurances', ->
   describe 'when given a list of line numbers and word lists', ->
-    words = [1, ['Now', 'is', 'the', 'winter', 'of', 'our', 'discontent']]
+    words = [[1, ['Now', 'is', 'the', 'winter', 'of', 'our', 'discontent']]]
     result = C.occurance_list words
+    console.log result
     it 'should return 7 tuples', ->
       result.should.have.length 7
     it 'should have winter on line one', ->
@@ -74,8 +95,9 @@ describe 'Occurances', ->
       result[3][1].should.equal 1
 
   describe 'when given a word list from a two line text', ->
-    words = [1, ['Now', 'is', 'the', 'winter'], 2, ['cat', 'sat', 'on']]
+    words = [[1, ['Now', 'is', 'the', 'winter']], [2, ['cat', 'sat', 'on']]]
     result = C.occurance_list words
+    console.log result
     it 'should have 7 tuples', ->
       result.should.have.length 7
     it 'should have winter on line one', ->
@@ -96,7 +118,7 @@ describe 'A concordance', ->
       result.should.have.property 'owl'
     it 'should have owl on line 1', ->
       result.owl[0].should.equal 1
-      
+
   describe 'when given an occurance list with two lines', ->
     occurances = [['now', 1], ['is', 1], ['the', 1], ['winter', 1],
                   ['the', 2], ['cat', 2], ['sat', 2]]
@@ -111,3 +133,17 @@ describe 'A concordance', ->
       result['the'].should.have.length 2
       result['the'].should.contain 1
       result['the'].should.contain 2
+
+  xdescribe 'when given the 1st para of the Magna Carta', ->
+    text = """JOHN, by the grace of God King of England, Lord of
+    Ireland, Duke of Normandy and Aquitaine, and Count of Anjou,
+    to his archbishops, bishops, abbots, earls, barons, justices,
+    foresters, sheriffs, stewards, servants, and to all his
+    officials and loyal subjects, Greeting."""
+    num_lines = C.text_to_numbered_lines text
+    mwl = C.multi_line_word_list num_lines
+    occurances = C.occurance_list mwl
+    result = C.concordance occurances
+    it 'should have many entries', ->
+      # console.log JSON.stringify mwl
+      Object.keys(result).should.have.length 10

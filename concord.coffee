@@ -16,14 +16,22 @@ multi_line_word_list = (a) -> # [[line_num, string]]
   (word_list x for x in a)
   # returns [[line_num, [words]]]
     
-occurance_list = (list_of_words) -> # [ line_num, [words]]
-  console.log "starting Occ"
+flatten = (array) ->
+  fn = (prev, curr) ->
+    if typeof curr is 'object'
+      prev.push i for i in curr
+    else
+      prev.push curr
+    prev
+  array.reduce fn, []
+
+occurance_list = (array_of_word_lists) -> # [line_num, [words]]
   fn = (previousValue, currentValue, index, array) ->
     line_num = array[index - 1]
     if typeof currentValue is 'object' # OMG! Arrays are objects?!
       previousValue.push [word, line_num] for word in currentValue
     previousValue
-  list_of_words.reduce fn, []
+  flatten (line.reduce fn, [] for line in array_of_word_lists)
   # returns [[word, line_num]]
 
 concordance = (x) -> # [[word, line_num]]
@@ -42,5 +50,6 @@ module.exports =
   text_to_numbered_lines: text_to_numbered_lines
   word_list: word_list
   multi_line_word_list: multi_line_word_list
+  flatten: flatten
   occurance_list: occurance_list
   concordance: concordance
