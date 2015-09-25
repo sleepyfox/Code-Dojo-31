@@ -4,7 +4,8 @@
   "description": "A code kata implementation that produces a concordance for a text",
   "main": "index.js",
   "scripts": {
-    "test": "coffeelint test-*.coffee && mocha --compilers coffee:coffee-script/register -u bdd -R spec test-*.coffee"
+    "test": "coffeelint test-*.coffee && mocha --compilers coffee:coffee-script/register -u bdd -R spec test-*.coffee",
+    "start": "coffee main.coffee magna_carta.txt"
   },
   "keywords": [
     "kata"
