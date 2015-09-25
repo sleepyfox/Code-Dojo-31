@@ -45,7 +45,7 @@ describe 'Convertine lines to words', ->
   describe 'when given a line with punctuation in it', ->
     text = [1, "Wow! said Fred, what will we do now?"]
     words = C.word_list text
-    console.log words
+    # console.log words
     it 'should remove punctuation', ->
       words[1][0].should.equal 'wow' # Not Wow!
       words[1][2].should.equal 'fred' # Not Fred,
