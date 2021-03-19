@@ -76,6 +76,7 @@ describe 'A multi-line word list', ->
       result[SECOND][CONTENT].should.contain 'the'
       result[SECOND][CONTENT].should.contain 'mat'
 
+
 describe 'Flatten', ->
   describe 'when given an empty array', ->
     it 'should return an empty array', ->

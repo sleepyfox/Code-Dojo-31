@@ -2,9 +2,9 @@
   "name": "Concordance",
   "version": "0.0.1",
   "description": "A code kata implementation that produces a concordance for a text",
-  "main": "index.js",
+  "main": "main.coffee",
   "scripts": {
-    "test": "coffeelint test-*.coffee && mocha --require coffeescript/register -u bdd -R spec test-*.coffee",
+    "test": "coffeelint test-*.coffee && jasmine test-*.coffee",
     "start": "coffee main.coffee magna_carta.txt"
   },
   "keywords": [
@@ -13,10 +13,10 @@
   "author": "@sleepyfox",
   "license": "CC-BY-NC-SA3.0",
   "devDependencies": {
-    "mocha": "^8.3.2",
     "chai": "^4.3.4",
-    "coffeescript": "^2.5.1",
     "coffeelint": "^2.1.0",
-    "node-inspector": "^0.7.1"
+    "coffeescript": "^2.5.1",
+    "jasmine": "^3.7.0",
+    "jasmine-spec-reporter": "^6.0.0"
   }
 }

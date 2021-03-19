@@ -17,7 +17,6 @@ node_modules*
 target/
 .idea/
 *.iml
-*.js
 *.map
 package-lock.json
 *~
