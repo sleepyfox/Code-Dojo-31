@@ -1,7 +1,7 @@
 require('chai').should()
 C = require './concord'
 
-describe "Convertine text to numbered lines", ->
+describe "Converting text to numbered lines", ->
   describe 'when given a one liner', ->
     result = C.text_to_numbered_lines 'one liner'
     it 'should have the right text', ->
@@ -19,7 +19,7 @@ describe "Convertine text to numbered lines", ->
       result[1][1].should.equal 'line two'
 
 
-describe 'Convertine lines to words', ->
+describe 'Converting lines to words', ->
   describe 'when given a one line text', ->
     words = C.word_list C.text_to_numbered_lines("one liner")[0]
     it 'should output an array with 2 elements', ->
@@ -71,7 +71,7 @@ describe 'A multi-line word list', ->
       result[1][1].should.contain 'the'
       result[1][1].should.contain 'mat'
 
-describe 'A flatten', ->
+describe 'Flatten', ->
   describe 'when given an empty array', ->
     it 'should return an empty array', ->
       result = C.flatten []
