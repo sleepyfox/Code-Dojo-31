@@ -20,3 +20,4 @@ target/
 *.js
 *.map
 package-lock.json
+*~
